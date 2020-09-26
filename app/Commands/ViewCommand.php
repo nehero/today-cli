@@ -7,14 +7,14 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use LaravelZero\Framework\Commands\Command;
 
-class OpenCommand extends Command
+class ViewCommand extends Command
 {
     /**
      * The signature of the command.
      *
      * @var string
      */
-    protected $signature = 'open';
+    protected $signature = 'view';
 
     /**
      * The description of the command.
