@@ -2,6 +2,7 @@
 
 namespace App\Commands;
 
+use App\Support\TodayApi;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
@@ -28,19 +29,14 @@ class AddCommand extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(TodayApi $todayApi)
     {
         $user = DB::table('users')->first();
         if (!$user) {
             return $this->error("You are not logged in");
         }
         $body = $this->ask("What would you like to remember?");
-        $result = Http::withHeaders([
-            'Accept' => 'application/json',
-            'Authorization' => "Bearer {$user->token}"
-        ])->post("http://localhost:8000/api/items", [
-            'body' => $body,
-        ])->json();
+        $result = $todayApi->addItemToTodayList($body);
         if (!$result['item']) {
             return $this->error("Something went wrong");
         }

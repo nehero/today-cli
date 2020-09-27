@@ -2,9 +2,9 @@
 
 namespace App\Commands;
 
+use App\Support\TodayApi;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
 use LaravelZero\Framework\Commands\Command;
 
 class AuthCommand extends Command
@@ -28,16 +28,11 @@ class AuthCommand extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(TodayApi $todayApi)
     {
         $email = $this->ask("Enter your email:");
         $password = $this->secret("Enter your password:");
-        $result = Http::withHeaders([
-            'Accept' => 'application/json',
-        ])->post("http://localhost:8000/api/api-keys", [
-            'email' => $email,
-            'password' => $password,
-        ])->json();
+        $result = $todayApi->authenticate($email, $password);
         if (!isset($result['token'])) {
             return $this->error("Invalid credentials");
         }
