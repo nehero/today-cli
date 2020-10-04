@@ -39,7 +39,34 @@ class ViewCommand extends Command
         if (empty($items['items'])) {
             $this->info('No items');
         }
-        foreach ($items['items'] as $item) {
+        $this->printOpenItems($items['items']);
+        $this->printCompletedItems($items['items']);
+    }
+
+    private function printOpenItems($items) 
+    {
+        $open = collect()->filter(function ($item) {
+            return empty($item['completed_at']);
+        });
+        $this->info("Open Items:");
+        if ($open->count() === 0) {
+            return $this->info("No items");
+        }
+        foreach ($open as $item) {
+            $this->info("- {$item['body']}");
+        }
+    }
+    
+    private function printCompletedItems($items) 
+    {
+        $completed = collect($items)->filter(function ($item) {
+            return !empty($item['completed_at']);
+        });
+        $this->info("Completed Items:");
+        if ($completed->count() === 0) {
+            return $this->info("No items");
+        }
+        foreach ($completed as $item) {
             $this->info("- {$item['body']}");
         }
     }

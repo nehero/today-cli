@@ -38,4 +38,9 @@ class TodayApi
       'body' => $body,
     ])->json();
   }
+  
+  public function completeItem($itemId)
+  {
+    return $this->getInstance()->post("items/{$itemId}/complete")->json();
+  }
 }

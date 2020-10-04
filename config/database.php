@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Str;
 
+$sqliteDir = env('APP_ENV') === 'production' ? $_SERVER['HOME'] . DIRECTORY_SEPARATOR . '.today-cli' : database_path();
+
 return [
 
     /*
@@ -38,7 +40,8 @@ return [
         'sqlite' => [
             'driver' => 'sqlite',
             'url' => env('DATABASE_URL'),
-            'database' => env('DB_DATABASE', database_path('database.sqlite')),
+            'directory' => $sqliteDir,
+            'database' =>  $sqliteDir . DIRECTORY_SEPARATOR . 'database.sqlite',
             'prefix' => '',
             'foreign_key_constraints' => env('DB_FOREIGN_KEYS', true),
         ],
